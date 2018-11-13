@@ -1,15 +1,27 @@
 <template>
   <div>
-    <b-form-input v-model="credentials.username" type="text" placeholder="Enter your username"></b-form-input>
-    <p>Value: {{ credentials.username }}</p>
-    <b-form-input v-model="credentials.password" type="password" placeholder="Enter your password"></b-form-input>
-    <p>Value: {{ credentials.password }}</p>
-    <b-button @click="login">Login</b-button>
+    <b-form>
+      <b-form-group label="Username:">
+        <b-form-input type="text" v-model="credentials.username" :state="!$v.credentials.username.$invalid" aria-describedby="input1LiveFeedback" placeholder="Enter username" />
+        <b-form-invalid-feedback>
+          This is a required field.
+        </b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group label="Password:">
+        <b-form-input type="password" v-model="credentials.password" :state="!$v.credentials.password.$invalid" aria-describedby="input1LiveFeedback" placeholder="Enter password" />
+        <b-form-invalid-feedback>
+          This is a required field.
+        </b-form-invalid-feedback>
+      </b-form-group>
+      <b-button @click="login()" :disabled="$v.credentials.$invalid" variant="primary">Login</b-button>
+    </b-form>
+    <b-alert :show="invalidCredentialsAlert" variant="danger">Invalid credentials. Try again.</b-alert>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   data() {
@@ -17,6 +29,17 @@ export default {
       credentials: {
         username: '',
         password: ''
+      },
+      invalidCredentialsAlert: false
+    }
+  },
+  validations: {
+    credentials: {
+      username: {
+        required
+      },
+      password: {
+        required
       }
     }
   },
@@ -26,6 +49,7 @@ export default {
       this.$store
         .dispatch('login', this.credentials)
         .then(() => this.$router.push({ path: '/home' }))
+        .catch(() => (this.invalidCredentialsAlert = true))
     }
   },
   created() {

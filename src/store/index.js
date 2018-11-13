@@ -18,6 +18,13 @@ export default new Vuex.Store({
     addProductToCart(state, item) {
       state.cart.push(item)
     },
+    deleteCartItem(state, item) {
+      let index = state.cart.indexOf(item)
+      state.cart.splice(index, 1)
+    },
+    clearCart(state) {
+      state.cart = []
+    },
     // addItem(state, rzecz) {
     //   state.rzeczy.push(rzecz)
     // },
@@ -66,9 +73,12 @@ export default new Vuex.Store({
       axios.get('http://localhost:51444/api/orders/userid')
         .then(result => commit('updateOrders', result.data))
     },
-    sendOrder({ commit }) {
-      axios.get('http://localhost:51444/api/orders/userid')
-        .then(result => commit('updateOrders', result.data))
+    sendOrder({ state }) {
+      let orderItems = []
+      state.cart.forEach(element => {
+        orderItems.push({ "productId": element.product.productId, "quantity": element.quantity })
+      })
+      return axios.post('http://localhost:51444/api/orders', { orderItems: orderItems })
     },
 
     // getAdminInfo({ commit }) {

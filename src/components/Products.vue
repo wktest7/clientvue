@@ -21,7 +21,7 @@
         <b-btn @click="resetQuantity" variant="primary" size="sm" v-b-modal="'addToCardModal' + row.item.productId" class="mr-2">
           Add to card
         </b-btn>
-        <b-modal v-bind:id="'addToCardModal' + row.item.productId" centered :title="row.item.name" ok-title="Add" ok-variant="success" @ok="addToCard(row.item, quantity)">
+        <b-modal v-bind:id="'addToCardModal' + row.item.productId" centered :title="row.item.name" ok-title="Add" ok-variant="success" :ok-disabled="$v.quantity.$invalid" @ok="addToCard(row.item, quantity)">
           <img src="https://via.placeholder.com/100">
           Price: {{row.item.price}}, Weight: {{row.item.weight}} [g] <br>
           <div>
@@ -33,7 +33,10 @@
             </b-collapse>
           </div>
 
-          <b-form-input type="number" min="1" step="1" placeholder="Enter quantity" v-model="quantity"></b-form-input>
+          <b-form-input type="number" min="1" step="1" placeholder="Enter quantity" v-model="quantity" :state="!$v.quantity.$invalid"></b-form-input>
+          <b-form-invalid-feedback>
+            This is a required field and must be numeric.
+          </b-form-invalid-feedback>
           <span v-if="quantity >= 1">Calculated price: {{row.item.price}} * {{quantity}} = {{(quantity * row.item.price).toFixed(2)}}</span>
 
           <!-- <form @submit.stop.prevent="handleSubmit">
@@ -46,6 +49,8 @@
 </template>
 
 <script>
+import { required, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
+
 export default {
   data() {
     return {
@@ -84,9 +89,16 @@ export default {
       this.quantity = ''
     },
     addToCard(product, quantity) {
-      alert(product + ' ' + quantity)
       let item = { product: product, quantity: quantity }
       this.$store.commit('addProductToCart', item)
+    }
+  },
+  validations: {
+    quantity: {
+      required,
+      numeric,
+      minValue: minValue(1),
+      maxValue: maxValue(1000)
     }
   },
   computed: {
