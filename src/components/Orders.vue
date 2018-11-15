@@ -5,23 +5,26 @@
       <hr>
       <template>
         <b-table striped hover :items="newOrder" :fields="newOrderfields">
+          <template slot="product.price" slot-scope="data">
+            {{data.item.product.price | currency}}
+          </template>
           <template slot="price" slot-scope="row">
-            {{(row.item.product.price * row.item.quantity).toFixed(2)}}
+            {{(row.item.product.price * row.item.quantity) | currency}}
           </template>
           <template slot="deleteItem" slot-scope="row">
             <b-btn @click="deleteCartItem(row.item)" variant="danger">Delete</b-btn>
           </template>
         </b-table>
       </template>
-      <h5 v-if="cartFinalPrice > 0">final price: {{cartFinalPrice}}</h5>
+      <h5>final price: {{ cartFinalPrice | currency }}</h5>
       <b-btn v-b-modal.sendOrder variant="success">Send</b-btn>
       <b-modal id="sendOrder" title="Confirmation" ok-title="Send" ok-variant="success" @ok="sendOrder()">
         <p>Are you sure you want to send this order?</p>
       </b-modal>
     </div>
     <h2>Orders history</h2>
-
-    <div v-for="(item, index) in orders" :key="index">
+    <h4>New Orders</h4>
+    <!-- <div v-for="(item, index) in orders" :key="index">
       <div>
         <b-btn v-b-toggle="'collapse' + index" variant="info">
           <p>{{item.status}} Date: {{item.dateCreated}} Final price: {{item.finalPrice.toFixed(2)}} ,(new - zaplac, wyslane - PDF generate) </p>
@@ -33,17 +36,46 @@
           </template>
         </b-collapse>
       </div>
+    </div> -->
 
-      <!-- <div v-for="(item, index) in item.orderItems" :key="index">
-        <p>{{item.productName}}</p>
-      </div> -->
+    <div v-for="(item, index) in getNewOrders" :key="'n' + index">
+      <div>
+        <b-btn v-b-toggle="'collapse' + index" variant="info">
+          <p>{{item.status}} Date: {{moment(item.dateCreated).format('Do MMMM YYYY, h:mm:ss a')}} Final price: {{item.finalPrice | currency}} ,(new - zaplac, wyslane - PDF generate) </p>
+        </b-btn>
+        <hr>
+        <b-collapse :id="'collapse'+ index" class="mt-2">
+          <template>
+            <b-table striped hover :items="item.orderItems" :fields="fields"></b-table>
+          </template>
+        </b-collapse>
+      </div>
+    </div>
 
+    <h4>Shipped Orders</h4>
+    <div v-for="(item, index) in getShippedOrders" :key="'s' + index">
+      <div>
+        <b-btn v-b-toggle="'collapse' + index" variant="info">
+          <p>{{item.status}} Date: {{item.dateCreated}} Final price: {{item.finalPrice | currency}} ,(new - zaplac, wyslane - PDF generate) </p>
+        </b-btn>
+        <hr>
+        <b-collapse :id="'collapse'+ index" class="mt-2">
+          <template>
+            <b-table striped hover :items="item.orderItems" :fields="fields"></b-table>
+          </template>
+        </b-collapse>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import currencyFilter from '../shared/currency-filter'
 import { mapGetters } from 'vuex'
+
 export default {
+  filters: {
+    currency: currencyFilter
+  },
   data() {
     return {
       fields: {
@@ -116,7 +148,7 @@ export default {
     orders() {
       return this.$store.state.orders
     },
-    ...mapGetters(['cartFinalPrice'])
+    ...mapGetters(['cartFinalPrice', 'getNewOrders', 'getShippedOrders'])
   },
   created() {
     this.$store.dispatch('getOrders')

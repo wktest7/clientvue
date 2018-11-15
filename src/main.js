@@ -3,11 +3,15 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 import axios from 'axios'
+import moment from 'moment'
 import BootstrapVue from 'bootstrap-vue'
 import Vuelidate from 'vuelidate'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+//Vue.use(moment)
+
+Vue.prototype.moment = moment
 Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
 Vue.config.productionTip = false

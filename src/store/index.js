@@ -97,8 +97,6 @@ export default new Vuex.Store({
   getters: {
     loggedIn(state) {
       return state.token !== null
-
-
     },
     isUser(state) {
       if (state.token !== null) {
@@ -129,7 +127,16 @@ export default new Vuex.Store({
         sum += element.product.price * element.quantity
       });
       return sum
+    },
+    getNewOrders(state) {
+      return state.orders.filter(x => x.status === "New")
+    },
+    getShippedOrders(state) {
+      return state.orders.filter(x => x.status === "Shipped")
     }
+    // cartLength(state) {
+    //   return state.cart.length
+    // },
   }
 })
 
