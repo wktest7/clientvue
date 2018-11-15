@@ -53,7 +53,7 @@
           </b-col>
         </b-row>
 
-        <b-modal id="addToCardModal" @hide="resetAddToCardModal" :title="addToCardModal.title" ok-title="Add" ok-variant="success" :ok-disabled="$v.quantity.$invalid" @ok="addToCard(row.item, quantity)">
+        <b-modal id="addToCardModal" @hide="resetAddToCardModal" :title="addToCardModal.product.name" ok-title="Add" ok-variant="success" :ok-disabled="$v.quantity.$invalid" @ok="addToCard(addToCardModal.product, quantity)">
           <b-row>
             <b-col md="6">
               <div>
@@ -61,8 +61,8 @@
               </div>
             </b-col>
             <b-col md="6">
-              <h5>Price: {{addToCardModal.price | currency}}</h5>
-              <h5>Weight: {{addToCardModal.weight}}</h5>
+              <h5>Price: {{addToCardModal.product.price | currency}}</h5>
+              <h5>Weight: {{addToCardModal.product.weight | weight}}</h5>
             </b-col>
           </b-row>
 
@@ -70,7 +70,7 @@
             <b-btn v-b-toggle.collapseDescription size="sm" variant="info">Description</b-btn>
             <b-collapse id="collapseDescription" class="mt-2">
               <b-card>
-                <p class="card-text">{{addToCardModal.description}}</p>
+                <p class="card-text">{{addToCardModal.product.description}}</p>
               </b-card>
             </b-collapse>
           </div>
@@ -79,7 +79,7 @@
             <b-form-invalid-feedback>
               This is a required field and must be numeric.
             </b-form-invalid-feedback>
-            <span v-if="quantity >= 1">Calculated price: {{addToCardModal.price | currency}} * {{quantity}} = {{(quantity * addToCardModal.price) | currency}} </span>
+            <span v-if="quantity >= 1">Calculated price: {{addToCardModal.product.price | currency}} * {{quantity}} = {{(quantity * addToCardModal.product.price) | currency}} </span>
 
           </div>
         </b-modal>
@@ -91,11 +91,13 @@
 
 <script>
 import currencyFilter from '../shared/currency-filter'
+import weightFilter from '../shared/weight-filter'
 import { required, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
 
 export default {
   filters: {
-    currency: currencyFilter
+    currency: currencyFilter,
+    weight: weightFilter
   },
   data() {
     return {
@@ -130,26 +132,17 @@ export default {
       pageOptions: [10, 20, 50],
       filter: null,
       addToCardModal: {
-        title: '',
-        description: '',
-        price: 0,
-        weight: ''
+        product: {}
       }
     }
   },
   methods: {
     openAddToCardModal(item, button) {
-      this.addToCardModal.title = item.name
-      this.addToCardModal.description = item.description
-      this.addToCardModal.price = item.price
-      this.addToCardModal.weight = item.weight
+      this.addToCardModal.product = item
       this.$root.$emit('bv::show::modal', 'addToCardModal', button)
     },
     resetAddToCardModal() {
-      this.addToCardModal.title = ''
-      this.addToCardModal.description = ''
-      this.addToCardModal.price = 0
-      this.addToCardModal.weight = ''
+      this.addToCardModal.product = {}
       this.quantity = ''
     },
     addToCard(product, quantity) {
