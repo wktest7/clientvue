@@ -22,6 +22,16 @@
         <p>Are you sure you want to send this order?</p>
       </b-modal>
     </div>
+
+    <div>
+      <b-btn v-b-toggle.collapse1 variant="primary">Toggle Collapse</b-btn>
+      <b-collapse id="collapse1" class="mt-2">
+        <b-card>
+          <NewOrders />
+        </b-card>
+      </b-collapse>
+    </div>
+
     <h2>Orders history</h2>
     <h4>New Orders</h4>
     <!-- <div v-for="(item, index) in orders" :key="index">
@@ -70,9 +80,11 @@
 </template>
 <script>
 import currencyFilter from '../shared/currency-filter'
+import NewOrders from './NewOrders.vue'
 import { mapGetters } from 'vuex'
 
 export default {
+  components: { NewOrders },
   filters: {
     currency: currencyFilter
   },

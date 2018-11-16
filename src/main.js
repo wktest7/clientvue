@@ -6,10 +6,15 @@ import axios from 'axios'
 import moment from 'moment'
 import BootstrapVue from 'bootstrap-vue'
 import Vuelidate from 'vuelidate'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCoffee, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-//Vue.use(moment)
+library.add(faCoffee, faCalendarAlt)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.prototype.moment = moment
 Vue.use(BootstrapVue)
