@@ -12,6 +12,13 @@ import Home from '../components/Home.vue'
 import Products from '../components/Products.vue'
 import Orders from '../components/Orders.vue'
 
+import EmployeeHome from '../components/Employee/Home.vue'
+import EmployeeProducts from '../components/Employee/Products.vue'
+
+
+import UserGuard from './user-guard'
+import EmployeeGuard from './employee-guard'
+
 export default new VueRouter({
   mode: 'history',
   routes: [{
@@ -19,20 +26,37 @@ export default new VueRouter({
     name: 'login',
     component: Login
   },
+  //user
   {
     path: '/home',
     name: 'home',
-    component: Home
+    component: Home,
+    beforeEnter: UserGuard
   },
   {
     path: '/products',
     name: 'products',
-    component: Products
+    component: Products,
+    beforeEnter: UserGuard
   },
   {
     path: '/orders',
     name: 'orders',
-    component: Orders
+    component: Orders,
+    beforeEnter: UserGuard
+  },
+  //employee employee-products
+  {
+    path: '/employee-home',
+    name: 'employee-home',
+    component: EmployeeHome,
+    beforeEnter: EmployeeGuard
+  },
+  {
+    path: '/employee-products',
+    name: 'employee-products',
+    component: EmployeeProducts,
+    beforeEnter: EmployeeGuard
   },
   // {
   //   path: '/admin',

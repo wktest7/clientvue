@@ -7,12 +7,12 @@ import moment from 'moment'
 import BootstrapVue from 'bootstrap-vue'
 import Vuelidate from 'vuelidate'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarAlt, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-library.add(faCoffee, faCalendarAlt)
+library.add(faCalendarAlt, faShoppingCart)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

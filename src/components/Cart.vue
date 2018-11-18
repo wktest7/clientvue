@@ -1,0 +1,105 @@
+<template>
+  <div>
+    <div v-if="cartFinalPrice > 0">
+      <template>
+        <b-table striped hover :items="newOrder" :fields="fields">
+          <template slot="quantity" slot-scope="row">
+            <input type="number" min="1" step="1" class="form-control" v-on:input="calculatePrice(row.item, $event)" placeholder="Enter quantity" :value="row.item.quantity">
+          </template>
+          <template slot="product.price" slot-scope="row">
+            {{row.item.product.price | currency}}
+          </template>
+          <template slot="price" slot-scope="row">
+            {{(row.item.product.price * row.item.quantity) | currency}}
+          </template>
+          <template slot="deleteItem" slot-scope="row">
+            <b-btn @click="deleteCartItem(row.item)" variant="danger">Delete</b-btn>
+          </template>
+        </b-table>
+      </template>
+      <div class="col-4 offset-4 text-center">
+        <h5>Final price: {{ cartFinalPrice | currency }}</h5>
+        <b-btn v-b-modal.sendOrder variant="success">Send</b-btn>
+      </div>
+      <b-modal id="sendOrder" title="Confirmation" ok-title="Send" ok-variant="success" @ok="sendOrder()">
+        <p>Are you sure you want to send this order?</p>
+      </b-modal>
+    </div>
+    <div v-else>
+      <br>
+      <h6>Your cart is empty.</h6>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+import currencyFilter from '../shared/currency-filter'
+
+export default {
+  filters: {
+    currency: currencyFilter
+  },
+  data() {
+    return {
+      fields: {
+        'product.name': {
+          label: 'Product name'
+        },
+        'product.weight': {
+          label: 'Weight [g]'
+        },
+        quantity: {
+          label: 'Quantity'
+        },
+        'product.price': {
+          label: 'Product price'
+        },
+        price: {
+          label: 'Price'
+        },
+        deleteItem: {
+          label: 'Delete'
+        }
+      }
+    }
+  },
+  methods: {
+    deleteCartItem(item) {
+      this.$store.commit('deleteCartItem', item)
+    },
+    sendOrder() {
+      this.$store
+        .dispatch('sendOrder')
+        .then(() => this.$store.dispatch('getOrders'))
+        .then(() => this.$store.commit('clearCart'))
+    },
+    calculatePrice(item, event) {
+      if (event.target.value < 0) {
+        this.$store.commit('deleteCartItem', item)
+        return
+      } else if (event.target.value == 0) {
+        event.target.value = 1
+      } else if (!/^\+?(0|[1-9]\d*)$/.test(event.target.value)) {
+        event.target.value = 1
+      } else if (event.target.value > 1000) {
+        event.target.value = 1000
+      }
+      let payload = {
+        product: item,
+        newQuantity: event.target.value
+      }
+      this.$store.commit('changeQuantity', payload)
+    }
+  },
+  computed: {
+    newOrder() {
+      return this.$store.state.cart
+    },
+    ...mapGetters(['cartFinalPrice'])
+  }
+}
+</script>
+
+<style>
+</style>

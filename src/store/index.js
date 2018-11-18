@@ -3,9 +3,16 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 
+import authModule from './modules/auth'
+
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  modules: {
+    auth: authModule
+
+  },
   state: {
     token: localStorage.getItem('token') || null,
     products: [],
@@ -16,11 +23,26 @@ export default new Vuex.Store({
   },
   mutations: {
     addProductToCart(state, item) {
-      state.cart.push(item)
+      let same
+      state.cart.forEach(element => {
+        if (item.product.productId === element.product.productId) {
+          element.quantity = +element.quantity + +item.quantity
+          same = true
+        }
+      })
+      if (!same) {
+        state.cart.push(item)
+      }
+
     },
     deleteCartItem(state, item) {
       let index = state.cart.indexOf(item)
       state.cart.splice(index, 1)
+    },
+    changeQuantity(state, item) {
+      let index = state.cart.indexOf(item.product)
+      let product = state.cart[index]
+      product.quantity = item.newQuantity
     },
     clearCart(state) {
       state.cart = []
@@ -100,8 +122,8 @@ export default new Vuex.Store({
     },
     isUser(state) {
       if (state.token !== null) {
-        let parseToken = parseJwt(state.token)
-        if (parseToken.role === "user") {
+        let parsedToken = parseJwt(state.token)
+        if (parsedToken.role === "user") {
           return true
         }
       }
@@ -109,14 +131,18 @@ export default new Vuex.Store({
     },
     isEmployee(state) {
       if (state.token !== null) {
-        let parseToken = parseJwt(state.token)
-        //console.log(parseToken.exp < Date.now())
-
-        if (parseToken.role === "employee") {
+        let parsedToken = parseJwt(state.token)
+        if (parsedToken.role === "employee") {
           return true
         }
       }
       return false
+    },
+    userName(state) {
+      if (state.token !== null) {
+        let parsedToken = parseJwt(state.token)
+        return parsedToken.unique_name
+      }
     },
     cartLength(state) {
       return state.cart.length
@@ -142,7 +168,7 @@ export default new Vuex.Store({
 
 
 function parseJwt(token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace('-', '+').replace('_', '/');
+  let base64Url = token.split('.')[1];
+  let base64 = base64Url.replace('-', '+').replace('_', '/');
   return JSON.parse(window.atob(base64));
 }

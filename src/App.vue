@@ -1,45 +1,33 @@
 <template>
   <div id="app">
     <div v-if="loggedIn">
-      <div v-if="isUser">
-        <b-navbar type="dark" variant="secondary" toggleable>
-          <b-navbar-toggle target="nav_dropdown_collapse"></b-navbar-toggle>
-          <b-collapse is-nav id="nav_dropdown_collapse">
-            <b-navbar-nav>
+      <b-navbar type="dark" variant="secondary" toggleable>
+        <b-navbar-toggle target="nav_dropdown_collapse"></b-navbar-toggle>
+        <b-collapse is-nav id="nav_dropdown_collapse">
+          <b-navbar-nav>
+            <template v-if="isUser">
               <router-link class="nav-link" to="/home">Home</router-link>
               <router-link class="nav-link" to="/products">Products</router-link>
               <router-link class="nav-link" to="/orders">Orders</router-link>
-              <router-link class="nav-link" to="/options">Options</router-link>
-              <router-link class="nav-link" to="/options">USER</router-link>
-              <router-link v-if="cartLength >= 1" class="nav-link" to="/orders">Current order: {{cartLength}}</router-link>
-            </b-navbar-nav>
-            <b-navbar-nav class="ml-auto">
-              <b-button v-if="loggedIn" variant="primary" @click="logout()">Logout</b-button>
-            </b-navbar-nav>
-          </b-collapse>
-        </b-navbar>
-      </div>
-      <div v-if="isEmployee">
-        <b-navbar type="dark" variant="secondary" toggleable>
-          <b-navbar-toggle target="nav_dropdown_collapse"></b-navbar-toggle>
-          <b-collapse is-nav id="nav_dropdown_collapse">
-            <b-navbar-nav>
-              <router-link class="nav-link" to="/home">Home</router-link>
-              <router-link class="nav-link" to="/products">Products</router-link>
-              <router-link class="nav-link" to="/orders">Orders</router-link>
-              <router-link class="nav-link" to="/options">Options</router-link>
-              <router-link class="nav-link" to="/options">EMPLOYEE</router-link>
-            </b-navbar-nav>
-            <b-navbar-nav class="ml-auto">
-              <b-button v-if="loggedIn" variant="primary" @click="logout()">Logout</b-button>
-            </b-navbar-nav>
-          </b-collapse>
-        </b-navbar>
-      </div>
+              <router-link v-if="cartLength >= 1" class="nav-link" to="/orders">
+                <font-awesome-icon icon="shopping-cart" />
+              </router-link>
+            </template>
+            <template v-if="isEmployee">
+              <router-link class="nav-link" to="/employee-home">Home</router-link>
+              <router-link class="nav-link" to="/employee-products">Products</router-link>
+            </template>
+          </b-navbar-nav>
+          <b-navbar-nav class="ml-auto">
+            <span class="nav-link">Hello: {{userName}}</span>
+            <b-button variant="primary" @click="logout()">Logout</b-button>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
     </div>
-
-    <router-view />
-    <h2>aa</h2>
+    <b-container fluid>
+      <router-view />
+    </b-container>
   </div>
 </template>
 
@@ -47,7 +35,13 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'app',
-  computed: mapGetters(['loggedIn', 'isEmployee', 'isUser', 'cartLength']),
+  computed: mapGetters([
+    'loggedIn',
+    'isEmployee',
+    'isUser',
+    'cartLength',
+    'userName'
+  ]),
   methods: {
     logout() {
       //localStorage.removeItem('token')

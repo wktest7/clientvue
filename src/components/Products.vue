@@ -127,9 +127,9 @@ export default {
         }
       },
       currentPage: 1,
-      perPage: 10,
+      perPage: 5,
       totalRows: this.$store.state.products.length,
-      pageOptions: [10, 20, 50],
+      pageOptions: [5, 10, 25],
       filter: null,
       addToCardModal: {
         product: {}

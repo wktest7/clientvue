@@ -23,7 +23,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-table :items="getNewOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
+      <b-table :items="getShippedOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
         <template slot="dateCreated" slot-scope="data">
           {{moment(data.item.dateCreated).format('Do MMMM YYYY, h:mm:ss a')}}
         </template>
@@ -35,11 +35,6 @@
             Show items
           </b-btn>
         </template>
-        <template slot="pay" slot-scope="row">
-          <b-btn variant="warning" size="sm" @click.stop="openPayModal(row.item, $event.target)" class="mr-2">
-            Pay
-          </b-btn>
-        </template>
       </b-table>
       <b-row>
         <b-col md="6" class="my-1">
@@ -47,7 +42,7 @@
         </b-col>
       </b-row>
 
-      <b-modal id="newOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.order.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
+      <b-modal id="shippedOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.order.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
         <template>
           <h6>Final price: {{itemsModal.order.finalPrice | currency}}</h6>
           <template>
@@ -59,12 +54,6 @@
               </template>
             </b-table>
           </template>
-        </template>
-      </b-modal>
-      <b-modal id="newOrderPayModal" size="lg" ok-only :title="moment(payModal.order.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
-        <template>
-          <h6>Final price: {{payModal.order.finalPrice | currency}}</h6>
-          <h6>Title: {{payModal.order.orderId}}</h6>
         </template>
       </b-modal>
     </template>
@@ -97,20 +86,14 @@ export default {
         },
         items: {
           label: 'Items'
-        },
-        pay: {
-          label: 'Pay'
         }
       },
       currentPage: 1,
       perPage: 5,
-      totalRows: this.$store.state.orders.filter(x => x.status === 'New')
+      totalRows: this.$store.state.orders.filter(x => x.status === 'Shipped')
         .length,
       pageOptions: [5, 10, 25],
       itemsModal: {
-        order: {}
-      },
-      payModal: {
         order: {}
       },
       itemsFields: {
@@ -133,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getNewOrders']),
+    ...mapGetters(['getShippedOrders']),
     filteredDate: {
       get() {
         if (
@@ -156,11 +139,7 @@ export default {
   methods: {
     openItemsModal(item, button) {
       this.itemsModal.order = item
-      this.$root.$emit('bv::show::modal', 'newOrderItemsModal', button)
-    },
-    openPayModal(item, button) {
-      this.payModal.order = item
-      this.$root.$emit('bv::show::modal', 'newOrderPayModal', button)
+      this.$root.$emit('bv::show::modal', 'shippedOrderItemsModal', button)
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length
