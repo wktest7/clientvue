@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form @submit.prevent="login">
+    <b-form @submit.prevent="loginForm">
       <b-form-group label="Username:">
         <b-form-input type="text" v-model="credentials.username" aria-describedby="input1LiveFeedback" placeholder="Enter username" />
         <b-form-invalid-feedback>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
@@ -45,9 +45,9 @@ export default {
   },
   computed: mapGetters(['loggedIn', 'isUser', 'isEmployee']),
   methods: {
-    login() {
-      this.$store
-        .dispatch('login', this.credentials)
+    ...mapActions(['login']),
+    loginForm() {
+      this.login(this.credentials)
         .then(() => {
           if (this.isUser) {
             this.$router.push({ path: '/home' })
@@ -59,9 +59,9 @@ export default {
     }
   },
   created() {
-    if (this.loggedIn && this.isUser) {
+    if (this.isUser) {
       this.$router.push({ path: '/home' })
-    } else if (this.loggedIn && this.isEmployee) {
+    } else if (this.isEmployee) {
       this.$router.push({ path: '/employee-home' })
     }
   }

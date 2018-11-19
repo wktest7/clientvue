@@ -21,7 +21,7 @@
         <h5>Final price: {{ cartFinalPrice | currency }}</h5>
         <b-btn v-b-modal.sendOrder variant="success">Send</b-btn>
       </div>
-      <b-modal id="sendOrder" title="Confirmation" ok-title="Send" ok-variant="success" @ok="sendOrder()">
+      <b-modal id="sendOrder" title="Confirmation" ok-title="Send" ok-variant="success" @ok="sendOrderBtn()">
         <p>Are you sure you want to send this order?</p>
       </b-modal>
     </div>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
 import currencyFilter from '../shared/currency-filter'
 
 export default {
@@ -65,18 +65,19 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('user', ['deleteCartItem', 'clearCart', 'changeQuantity']),
+    ...mapActions('user', ['getOrders', 'sendOrder']),
     deleteCartItem(item) {
-      this.$store.commit('deleteCartItem', item)
+      this.deleteCartItem(item)
     },
-    sendOrder() {
-      this.$store
-        .dispatch('sendOrder')
-        .then(() => this.$store.dispatch('getOrders'))
-        .then(() => this.$store.commit('clearCart'))
+    sendOrderBtn() {
+      this.sendOrder()
+        .then(() => this.getOrders())
+        .then(() => this.clearCart())
     },
     calculatePrice(item, event) {
       if (event.target.value < 0) {
-        this.$store.commit('deleteCartItem', item)
+        this.deleteCartItem(item)
         return
       } else if (event.target.value == 0) {
         event.target.value = 1
@@ -89,14 +90,12 @@ export default {
         product: item,
         newQuantity: event.target.value
       }
-      this.$store.commit('changeQuantity', payload)
+      this.changeQuantity(payload)
     }
   },
   computed: {
-    newOrder() {
-      return this.$store.state.cart
-    },
-    ...mapGetters(['cartFinalPrice'])
+    ...mapState('user', { newOrder: 'cart' }),
+    ...mapGetters('user', { cartFinalPrice: 'cartFinalPrice' })
   }
 }
 </script>

@@ -93,6 +93,7 @@
 import currencyFilter from '../shared/currency-filter'
 import weightFilter from '../shared/weight-filter'
 import { required, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   filters: {
@@ -128,7 +129,8 @@ export default {
       },
       currentPage: 1,
       perPage: 5,
-      totalRows: this.$store.state.products.length,
+      //totalRows: this.$store.state.products.length,
+      totalRows: mapState('user', { products: 'products' }).length,
       pageOptions: [5, 10, 25],
       filter: null,
       addToCardModal: {
@@ -137,6 +139,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', ['getProducts']),
+    ...mapMutations('user', ['addProductToCart']),
     openAddToCardModal(item, button) {
       this.addToCardModal.product = item
       this.$root.$emit('bv::show::modal', 'addToCardModal', button)
@@ -147,7 +151,7 @@ export default {
     },
     addToCard(product, quantity) {
       let item = { product: product, quantity: quantity }
-      this.$store.commit('addProductToCart', item)
+      this.addProductToCart(item)
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length
@@ -163,12 +167,10 @@ export default {
     }
   },
   computed: {
-    products() {
-      return this.$store.state.products
-    }
+    ...mapState('user', { products: 'products' })
   },
   created() {
-    this.$store.dispatch('getProducts')
+    this.getProducts()
   }
 }
 </script>

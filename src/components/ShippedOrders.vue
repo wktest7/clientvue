@@ -90,7 +90,9 @@ export default {
       },
       currentPage: 1,
       perPage: 5,
-      totalRows: this.$store.state.orders.filter(x => x.status === 'Shipped')
+      // totalRows: this.$store.state.orders.filter(x => x.status === 'Shipped')
+      //   .length,
+      totalRows: mapGetters('user', { getShippedOrders: 'getShippedOrders' })
         .length,
       pageOptions: [5, 10, 25],
       itemsModal: {
@@ -116,7 +118,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getShippedOrders']),
+    ...mapGetters('user', { getShippedOrders: 'getShippedOrders' }),
     filteredDate: {
       get() {
         if (

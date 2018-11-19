@@ -19,18 +19,18 @@ import currencyFilter from '../shared/currency-filter'
 import NewOrders from './NewOrders.vue'
 import ShippedOrders from './ShippedOrders.vue'
 import Cart from './Cart.vue'
-import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   components: { NewOrders, ShippedOrders, Cart },
   filters: {
     currency: currencyFilter
   },
-  computed: {
-    ...mapGetters(['cartFinalPrice'])
+  methods: {
+    ...mapActions('user', ['getOrders'])
   },
   created() {
-    this.$store.dispatch('getOrders')
+    this.getOrders()
   }
 }
 </script>

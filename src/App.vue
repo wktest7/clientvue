@@ -32,20 +32,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'app',
-  computed: mapGetters([
-    'loggedIn',
-    'isEmployee',
-    'isUser',
-    'cartLength',
-    'userName'
-  ]),
+  computed: {
+    ...mapGetters(['loggedIn', 'isEmployee', 'isUser', 'userName']),
+    ...mapGetters('user', { cartLength: 'cartLength' })
+  },
+
   methods: {
+    ...mapMutations(['removeToken']),
     logout() {
-      //localStorage.removeItem('token')
-      this.$store.commit('removeToken')
+      this.removeToken()
       this.$router.push({ path: '/login' })
     }
   }
