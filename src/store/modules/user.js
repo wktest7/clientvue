@@ -69,10 +69,10 @@ export default {
       });
       return sum
     },
-    getNewOrders(state) {
+    newOrders(state) {
       return state.orders.filter(x => x.status === "New")
     },
-    getShippedOrders(state) {
+    shippedOrders(state) {
       return state.orders.filter(x => x.status === "Shipped")
     }
   }

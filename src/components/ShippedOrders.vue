@@ -23,7 +23,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-table :items="getShippedOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
+      <b-table :items="shippedOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
         <template slot="dateCreated" slot-scope="data">
           {{moment(data.item.dateCreated).format('Do MMMM YYYY, h:mm:ss a')}}
         </template>
@@ -118,7 +118,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user', { getShippedOrders: 'getShippedOrders' }),
+    ...mapGetters('user', { shippedOrders: 'shippedOrders' }),
     filteredDate: {
       get() {
         if (

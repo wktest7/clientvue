@@ -13,7 +13,7 @@
             {{(row.item.product.price * row.item.quantity) | currency}}
           </template>
           <template slot="deleteItem" slot-scope="row">
-            <b-btn @click="deleteCartItem(row.item)" variant="danger">Delete</b-btn>
+            <b-btn @click="deleteCartItemBtn(row.item)" variant="danger">Delete</b-btn>
           </template>
         </b-table>
       </template>
@@ -67,7 +67,7 @@ export default {
   methods: {
     ...mapMutations('user', ['deleteCartItem', 'clearCart', 'changeQuantity']),
     ...mapActions('user', ['getOrders', 'sendOrder']),
-    deleteCartItem(item) {
+    deleteCartItemBtn(item) {
       this.deleteCartItem(item)
     },
     sendOrderBtn() {

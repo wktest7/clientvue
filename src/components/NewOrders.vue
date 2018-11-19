@@ -23,7 +23,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-table :items="getNewOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
+      <b-table :items="newOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
         <template slot="dateCreated" slot-scope="data">
           {{moment(data.item.dateCreated).format('Do MMMM YYYY, h:mm:ss a')}}
         </template>
@@ -106,7 +106,7 @@ export default {
       perPage: 5,
       // totalRows: this.$store.state.orders.filter(x => x.status === 'New')
       //   .length,
-      totalRows: mapGetters('user', { getNewOrders: 'getNewOrders' }).length,
+      totalRows: mapGetters('user', { newOrders: 'newOrders' }).length,
       pageOptions: [5, 10, 25],
       itemsModal: {
         order: {}
@@ -134,7 +134,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user', { getNewOrders: 'getNewOrders' }),
+    ...mapGetters('user', { newOrders: 'newOrders' }),
     filteredDate: {
       get() {
         if (
