@@ -7,22 +7,24 @@
         <AvailableProducts />
       </b-tab>
       <b-tab title="Hidden products">
-
+        <HiddenProducts />
       </b-tab>
       <b-tab title="Add new product">
-
+        <AddProduct />
       </b-tab>
     </b-tabs>
-
   </div>
 </template>
 
 <script>
 import AvailableProducts from './AvailableProducts.vue'
+import HiddenProducts from './HiddenProducts.vue'
+import AddProduct from './AddProduct.vue'
+
 import { mapActions } from 'vuex'
 
 export default {
-  components: { AvailableProducts },
+  components: { AvailableProducts, HiddenProducts, AddProduct },
   methods: {
     ...mapActions('employee', ['getProducts', 'getCategories'])
   },

@@ -14,6 +14,7 @@ import Orders from '../components/Orders.vue'
 
 import EmployeeHome from '../components/Employee/Home.vue'
 import EmployeeProducts from '../components/Employee/Products.vue'
+import EmployeeOrders from '../components/Employee/Orders.vue'
 
 
 import UserGuard from './user-guard'
@@ -56,6 +57,12 @@ export default new VueRouter({
     path: '/employee-products',
     name: 'employee-products',
     component: EmployeeProducts,
+    beforeEnter: EmployeeGuard
+  },
+  {
+    path: '/employee-orders',
+    name: 'employee-orders',
+    component: EmployeeOrders,
     beforeEnter: EmployeeGuard
   },
   // {

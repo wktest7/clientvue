@@ -15,7 +15,6 @@
   </div>
 </template>
 <script>
-import currencyFilter from '../shared/currency-filter'
 import NewOrders from './NewOrders.vue'
 import ShippedOrders from './ShippedOrders.vue'
 import Cart from './Cart.vue'
@@ -23,9 +22,6 @@ import { mapActions } from 'vuex'
 
 export default {
   components: { NewOrders, ShippedOrders, Cart },
-  filters: {
-    currency: currencyFilter
-  },
   methods: {
     ...mapActions('user', ['getOrders'])
   },

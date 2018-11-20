@@ -53,7 +53,7 @@
           </b-col>
         </b-row>
 
-        <b-modal id="addToCardModal" @hide="resetAddToCardModal" :title="addToCardModal.product.name" ok-title="Add" ok-variant="success" :ok-disabled="$v.quantity.$invalid" @ok="addToCard(addToCardModal.product, quantity)">
+        <b-modal id="addToCardModal" @hide="resetQuantity" :title="addToCardModal.name" ok-title="Add" ok-variant="success" :ok-disabled="$v.quantity.$invalid" @ok="addToCard(addToCardModal, quantity)">
           <b-row>
             <b-col md="6">
               <div>
@@ -61,8 +61,8 @@
               </div>
             </b-col>
             <b-col md="6">
-              <h5>Price: {{addToCardModal.product.price | currency}}</h5>
-              <h5>Weight: {{addToCardModal.product.weight | weight}}</h5>
+              <h5>Price: {{addToCardModal.price | currency}}</h5>
+              <h5>Weight: {{addToCardModal.weight | weight}}</h5>
             </b-col>
           </b-row>
 
@@ -70,7 +70,7 @@
             <b-btn v-b-toggle.collapseDescription size="sm" variant="info">Description</b-btn>
             <b-collapse id="collapseDescription" class="mt-2">
               <b-card>
-                <p class="card-text">{{addToCardModal.product.description}}</p>
+                <p class="card-text">{{addToCardModal.description}}</p>
               </b-card>
             </b-collapse>
           </div>
@@ -79,7 +79,7 @@
             <b-form-invalid-feedback>
               This is a required field and must be numeric.
             </b-form-invalid-feedback>
-            <span v-if="quantity >= 1">Calculated price: {{addToCardModal.product.price | currency}} * {{quantity}} = {{(quantity * addToCardModal.product.price) | currency}} </span>
+            <span v-if="quantity >= 1">Calculated price: {{addToCardModal.price | currency}} * {{quantity}} = {{(quantity * addToCardModal.price) | currency}} </span>
 
           </div>
         </b-modal>
@@ -133,20 +133,17 @@ export default {
       totalRows: mapState('user', { products: 'products' }).length,
       pageOptions: [5, 10, 25],
       filter: null,
-      addToCardModal: {
-        product: {}
-      }
+      addToCardModal: {}
     }
   },
   methods: {
     ...mapActions('user', ['getProducts']),
     ...mapMutations('user', ['addProductToCart']),
     openAddToCardModal(item, button) {
-      this.addToCardModal.product = item
+      this.addToCardModal = item
       this.$root.$emit('bv::show::modal', 'addToCardModal', button)
     },
-    resetAddToCardModal() {
-      this.addToCardModal.product = {}
+    resetQuantity() {
       this.quantity = ''
     },
     addToCard(product, quantity) {

@@ -22,7 +22,7 @@
         </b-row>
 
         <!-- Main table element -->
-        <b-table :items="availableProducts" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
+        <b-table :items="hiddenProducts" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
           <template slot="price" slot-scope="data">
             {{data.item.price | currency}}
           </template>
@@ -53,7 +53,7 @@
           </b-col>
         </b-row>
 
-        <b-modal :ok-disabled="$v.editProductModal.$invalid" id="editAvailableProductModal" ok-title="Edit" ok-variant="warning" :title="editProductModal.name" @ok="editProductBtn()">
+        <b-modal :ok-disabled="$v.editProductModal.$invalid" id="editHiddenProductModal" ok-title="Edit" ok-variant="warning" :title="editProductModal.name" @ok="editProductBtn()">
           <b-row>
 
             <div class="col-4 offset-4">
@@ -159,7 +159,7 @@ export default {
       perPage: 5,
       //totalRows: this.$store.state.products.length,
       totalRows: mapGetters('employee', {
-        availableProducts: 'availableProducts'
+        availableProducts: 'hiddenProducts'
       }).length,
       pageOptions: [5, 10, 25],
       filter: null,
@@ -200,14 +200,14 @@ export default {
     },
     openEditProductModal(item, button) {
       this.editProductModal = JSON.parse(JSON.stringify(item))
-      this.$root.$emit('bv::show::modal', 'editAvailableProductModal', button)
+      this.$root.$emit('bv::show::modal', 'editHiddenProductModal', button)
     },
     editProductBtn() {
       this.editProduct(this.editProductModal).then(() => this.getProducts())
     }
   },
   computed: {
-    ...mapGetters('employee', { availableProducts: 'availableProducts' }),
+    ...mapGetters('employee', { hiddenProducts: 'hiddenProducts' }),
     ...mapState('employee', { categories: 'categories' })
   }
 }

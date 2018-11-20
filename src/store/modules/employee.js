@@ -4,7 +4,8 @@ export default {
   namespaced: true,
   state: {
     products: [],
-    categories: []
+    categories: [],
+    orders: []
   },
   mutations: {
     updateProducts(state, products) {
@@ -12,6 +13,9 @@ export default {
     },
     updateCategories(state, categories) {
       state.categories = categories
+    },
+    updateOrders(state, orders) {
+      state.orders = orders
     }
 
   },
@@ -26,6 +30,13 @@ export default {
     },
     editProduct(context, product) {
       return axios.put('http://localhost:51444/api/products', product)
+    },
+    addProduct(context, product) {
+      return axios.post('http://localhost:51444/api/products', product)
+    },
+    getOrders({ commit }) {
+      axios.get('http://localhost:51444/api/orders')
+        .then(result => commit('updateOrders', result.data))
     }
   },
   getters: {
@@ -34,6 +45,12 @@ export default {
     },
     hiddenProducts(state) {
       return state.products.filter(x => x.isHidden === true)
+    },
+    newOrders(state) {
+      return state.orders.filter(x => x.status === "New")
+    },
+    shippedOrders(state) {
+      return state.orders.filter(x => x.status === "Shipped")
     }
   }
 }
