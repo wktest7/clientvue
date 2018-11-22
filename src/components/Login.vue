@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="col-6 offset-3" style="margin-top:150px;">
     <b-form @submit.prevent="loginForm">
       <b-form-group label="Username:">
         <b-form-input type="text" v-model="credentials.username" aria-describedby="input1LiveFeedback" placeholder="Enter username" />
@@ -13,9 +13,11 @@
           This is a required field.
         </b-form-invalid-feedback>
       </b-form-group>
-      <b-button type="submit" :disabled="$v.credentials.$invalid" variant="primary">Login</b-button>
+      <div class="text-center">
+        <b-button type="submit" :disabled="$v.credentials.$invalid" variant="primary">Login</b-button>
+      </div>
     </b-form>
-    <b-alert :show="invalidCredentialsAlert" variant="danger">Invalid credentials. Try again.</b-alert>
+    <b-alert class="my-2" :show="invalidCredentialsAlert" variant="danger">Invalid credentials. Try again.</b-alert>
   </div>
 </template>
 

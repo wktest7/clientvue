@@ -29,7 +29,7 @@
           {{data.item.finalPrice | currency}}
         </template>
         <template slot="items" slot-scope="row">
-          <b-btn variant="primary" size="sm" @click.stop="openItemsModal(row.item, $event.target)" class="mr-2">
+          <b-btn variant="primary" size="sm" @click="openItemsModal(row.item)" class="mr-2">
             Show items
           </b-btn>
         </template>
@@ -40,7 +40,7 @@
         </b-col>
       </b-row>
 
-      <b-modal id="shippedOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
+      <b-modal ref="shippedOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
         <template>
           <h6>Final price: {{itemsModal.finalPrice | currency}}</h6>
           <template>
@@ -71,6 +71,9 @@ export default {
   data() {
     return {
       fields: {
+        orderId: {
+          label: 'Order Id'
+        },
         companyName: {
           label: 'Company',
           sortable: true
@@ -124,9 +127,10 @@ export default {
   },
   methods: {
     ...mapActions('employee', ['updateOrder', 'getOrders']),
-    openItemsModal(item, button) {
+    openItemsModal(item) {
       this.itemsModal = item
-      this.$root.$emit('bv::show::modal', 'shippedOrderItemsModal', button)
+      this.$refs.shippedOrderItemsModal.show()
+      //this.$root.$emit('bv::show::modal', 'shippedOrderItemsModal', button)
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length

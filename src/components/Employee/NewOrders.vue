@@ -29,12 +29,12 @@
           {{data.item.finalPrice | currency}}
         </template>
         <template slot="items" slot-scope="row">
-          <b-btn variant="primary" size="sm" @click.stop="openItemsModal(row.item, $event.target)" class="mr-2">
+          <b-btn variant="primary" size="sm" @click="openItemsModal(row.item)" class="mr-2">
             Show items
           </b-btn>
         </template>
         <template slot="changeStatus" slot-scope="row">
-          <b-btn variant="warning" size="sm" @click.stop="openChangeStatusModal(row.item, $event.target)" class="mr-2">
+          <b-btn variant="warning" size="sm" @click="openChangeStatusModal(row.item)" class="mr-2">
             Change to shipped
           </b-btn>
         </template>
@@ -45,7 +45,7 @@
         </b-col>
       </b-row>
 
-      <b-modal id="newOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
+      <b-modal ref="newOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
         <template>
           <h6>Final price: {{itemsModal.finalPrice | currency}}</h6>
           <template>
@@ -59,7 +59,7 @@
           </template>
         </template>
       </b-modal>
-      <b-modal id="changeStatusModal" @ok="changeStatusBtn()" ok-variant="warning" ok-title="Change" :title="moment(changeStatusModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
+      <b-modal ref="changeStatusModal" @ok="changeStatusBtn()" ok-variant="warning" ok-title="Change" :title="moment(changeStatusModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
         <template>
           <h4>Are you sure you want to change status this order?</h4>
           <h6>Company: {{changeStatusModal.companyName}}</h6>
@@ -81,6 +81,9 @@ export default {
   data() {
     return {
       fields: {
+        orderId: {
+          label: 'Order Id'
+        },
         companyName: {
           label: 'Company',
           sortable: true
@@ -137,13 +140,15 @@ export default {
   },
   methods: {
     ...mapActions('employee', ['updateOrder', 'getOrders']),
-    openItemsModal(item, button) {
+    openItemsModal(item) {
       this.itemsModal = item
-      this.$root.$emit('bv::show::modal', 'newOrderItemsModal', button)
+      this.$refs.newOrderItemsModal.show()
+      //this.$root.$emit('bv::show::modal', 'newOrderItemsModal', button)
     },
-    openChangeStatusModal(item, button) {
+    openChangeStatusModal(item) {
       this.changeStatusModal = item
-      this.$root.$emit('bv::show::modal', 'changeStatusModal', button)
+      //this.$root.$emit('bv::show::modal', 'changeStatusModal', button)
+      this.$refs.changeStatusModal.show()
     },
     changeStatusBtn() {
       let order = {

@@ -28,7 +28,7 @@
           </template>
           <template slot="showDescription" slot-scope="row">
             <!-- we use @click.stop here to prevent emitting of a 'row-clicked' event  -->
-            <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
+            <b-button size="sm" @click="row.toggleDetails" class="mr-2">
               {{ row.detailsShowing ? 'Hide' : 'Show'}} Description
             </b-button>
           </template>
@@ -41,7 +41,7 @@
             </b-card>
           </template>
           <template slot="edit" slot-scope="row">
-            <b-btn variant="warning" size="sm" @click.stop="openEditProductModal(row.item, $event.target)" class="mr-2">
+            <b-btn variant="warning" size="sm" @click="openEditProductModal(row.item)" class="mr-2">
               Edit
             </b-btn>
           </template>
@@ -53,12 +53,8 @@
           </b-col>
         </b-row>
 
-        <b-modal :ok-disabled="$v.editProductModal.$invalid" id="editHiddenProductModal" ok-title="Edit" ok-variant="warning" :title="editProductModal.name" @ok="editProductBtn()">
+        <b-modal :ok-disabled="$v.editProductModal.$invalid" ref="editHiddenProductModal" ok-title="Edit" ok-variant="warning" :title="editProductModal.name" @ok="editProductBtn()">
           <b-row>
-
-            <div class="col-4 offset-4">
-              <b-img src="https://placeimg.com/640/480/tech" style="width: 100%;"></b-img>
-            </div>
             <b-form-group class="col-10 offset-1" label="Name:">
               <b-form-input type="text" :class="[$v.editProductModal.name.$invalid ? 'is-invalid' : '']" v-model="editProductModal.name" placeholder="Enter name" />
               <div class="invalid-feedback" v-if="!$v.editProductModal.name.required">Field is required.</div>
@@ -203,9 +199,10 @@ export default {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     },
-    openEditProductModal(item, button) {
+    openEditProductModal(item) {
       this.editProductModal = JSON.parse(JSON.stringify(item))
-      this.$root.$emit('bv::show::modal', 'editHiddenProductModal', button)
+      this.$refs.editHiddenProductModal.show()
+      //this.$root.$emit('bv::show::modal', 'editHiddenProductModal', button)
     },
     editProductBtn() {
       this.editProduct(this.editProductModal).then(() => this.getProducts())

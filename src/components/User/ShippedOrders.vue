@@ -23,7 +23,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-table :items="newOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
+      <b-table :items="shippedOrders" :fields="fields" :filter="filteredDate" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
         <template slot="dateCreated" slot-scope="data">
           {{moment(data.item.dateCreated).format('Do MMMM YYYY, h:mm:ss a')}}
         </template>
@@ -31,13 +31,8 @@
           {{data.item.finalPrice | currency}}
         </template>
         <template slot="items" slot-scope="row">
-          <b-btn variant="primary" size="sm" @click.stop="openItemsModal(row.item, $event.target)" class="mr-2">
+          <b-btn variant="primary" size="sm" @click="openItemsModal(row.item)" class="mr-2">
             Show items
-          </b-btn>
-        </template>
-        <template slot="pay" slot-scope="row">
-          <b-btn variant="warning" size="sm" @click.stop="openPayModal(row.item, $event.target)" class="mr-2">
-            Pay
           </b-btn>
         </template>
       </b-table>
@@ -47,7 +42,7 @@
         </b-col>
       </b-row>
 
-      <b-modal id="newOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
+      <b-modal ref="shippedOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
         <template>
           <h6>Final price: {{itemsModal.finalPrice | currency}}</h6>
           <template>
@@ -61,19 +56,13 @@
           </template>
         </template>
       </b-modal>
-      <b-modal id="newOrderPayModal" size="lg" ok-only :title="moment(itpayModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
-        <template>
-          <h6>Final price: {{itpayModal.finalPrice | currency}}</h6>
-          <h6>Title: {{itpayModal.orderId}}</h6>
-        </template>
-      </b-modal>
     </template>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import currencyFilter from '../shared/currency-filter'
+import currencyFilter from '../../shared/currency-filter'
 import Datepicker from 'vuejs-datepicker'
 
 export default {
@@ -97,19 +86,16 @@ export default {
         },
         items: {
           label: 'Items'
-        },
-        pay: {
-          label: 'Pay'
         }
       },
       currentPage: 1,
       perPage: 5,
-      // totalRows: this.$store.state.orders.filter(x => x.status === 'New')
+      // totalRows: this.$store.state.orders.filter(x => x.status === 'Shipped')
       //   .length,
-      totalRows: mapGetters('user', { newOrders: 'newOrders' }).length,
+      totalRows: mapGetters('user', { getShippedOrders: 'getShippedOrders' })
+        .length,
       pageOptions: [5, 10, 25],
       itemsModal: {},
-      payModal: {},
       itemsFields: {
         productName: {
           label: 'Product name'
@@ -130,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user', { newOrders: 'newOrders' }),
+    ...mapGetters('user', { shippedOrders: 'shippedOrders' }),
     filteredDate: {
       get() {
         if (
@@ -151,13 +137,10 @@ export default {
     }
   },
   methods: {
-    openItemsModal(item, button) {
+    openItemsModal(item) {
       this.itemsModal = item
-      this.$root.$emit('bv::show::modal', 'newOrderItemsModal', button)
-    },
-    openPayModal(item, button) {
-      this.itpayModal = item
-      this.$root.$emit('bv::show::modal', 'newOrderPayModal', button)
+      //this.$root.$emit('bv::show::modal', 'shippedOrderItemsModal', button)
+      this.$refs.shippedOrderItemsModal.show()
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length

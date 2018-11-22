@@ -28,7 +28,7 @@
           </template>
           <template slot="showDescription" slot-scope="row">
             <!-- we use @click.stop here to prevent emitting of a 'row-clicked' event  -->
-            <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
+            <b-button size="sm" @click="row.toggleDetails" class="mr-2">
               {{ row.detailsShowing ? 'Hide' : 'Show'}} Description
             </b-button>
           </template>
@@ -41,7 +41,7 @@
             </b-card>
           </template>
           <template slot="addToCard" slot-scope="row">
-            <b-btn variant="primary" size="sm" @click.stop="openAddToCardModal(row.item, $event.target)" class="mr-2">
+            <b-btn variant="primary" size="sm" @click="openAddToCardModal(row.item)" class="mr-2">
               Add to card
             </b-btn>
           </template>
@@ -53,26 +53,20 @@
           </b-col>
         </b-row>
 
-        <b-modal id="addToCardModal" @hide="resetQuantity" :title="addToCardModal.name" ok-title="Add" ok-variant="success" :ok-disabled="$v.quantity.$invalid" @ok="addToCard(addToCardModal, quantity)">
+        <b-modal ref="addToCardModal" @hide="resetQuantity" :title="addToCardModal.name" ok-title="Add" ok-variant="success" :ok-disabled="$v.quantity.$invalid" @ok="addToCard(addToCardModal, quantity)">
           <b-row>
-            <b-col md="6">
-              <div>
-                <b-img src="https://placeimg.com/640/480/tech" style="width: 100%;"></b-img>
-              </div>
-            </b-col>
-            <b-col md="6">
+            <b-col>
               <h5>Price: {{addToCardModal.price | currency}}</h5>
               <h5>Weight: {{addToCardModal.weight | weight}}</h5>
             </b-col>
           </b-row>
 
           <div class="py-1">
-            <b-btn v-b-toggle.collapseDescription size="sm" variant="info">Description</b-btn>
-            <b-collapse id="collapseDescription" class="mt-2">
-              <b-card>
-                <p class="card-text">{{addToCardModal.description}}</p>
-              </b-card>
-            </b-collapse>
+
+            <b-card>
+              <p class="card-text">{{addToCardModal.description}}</p>
+            </b-card>
+
           </div>
           <div>
             <b-form-input type="number" min="1" step="1" placeholder="Enter quantity" v-model="quantity" :state="!$v.quantity.$invalid"></b-form-input>
@@ -90,8 +84,8 @@
 </template>
 
 <script>
-import currencyFilter from '../shared/currency-filter'
-import weightFilter from '../shared/weight-filter'
+import currencyFilter from '../../shared/currency-filter'
+import weightFilter from '../../shared/weight-filter'
 import { required, numeric, minValue, maxValue } from 'vuelidate/lib/validators'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
@@ -139,9 +133,10 @@ export default {
   methods: {
     ...mapActions('user', ['getProducts']),
     ...mapMutations('user', ['addProductToCart']),
-    openAddToCardModal(item, button) {
+    openAddToCardModal(item) {
       this.addToCardModal = item
-      this.$root.$emit('bv::show::modal', 'addToCardModal', button)
+      this.$refs.addToCardModal.show()
+      //this.$root.$emit('bv::show::modal', 'addToCardModal', button)
     },
     resetQuantity() {
       this.quantity = ''

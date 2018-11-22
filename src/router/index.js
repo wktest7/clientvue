@@ -8,9 +8,9 @@ Vue.use(VueRouter)
 // import AdminTwo from '../components/AdminTwo.vue'
 // import About from '../components/About.vue'
 import Login from '../components/Login.vue'
-import Home from '../components/Home.vue'
-import Products from '../components/Products.vue'
-import Orders from '../components/Orders.vue'
+import Home from '../components/User/Home.vue'
+import Products from '../components/User/Products.vue'
+import Orders from '../components/User/Orders.vue'
 
 import EmployeeHome from '../components/Employee/Home.vue'
 import EmployeeProducts from '../components/Employee/Products.vue'

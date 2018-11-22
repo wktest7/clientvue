@@ -1,5 +1,8 @@
 <template>
   <div>
+    <b-alert :show="dismissCountDown" dismissible variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+      <p class="text-center">Order placed.</p>
+    </b-alert>
     <div v-if="cartFinalPrice > 0">
       <template>
         <b-table striped hover :items="newOrder" :fields="fields">
@@ -34,7 +37,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
-import currencyFilter from '../shared/currency-filter'
+import currencyFilter from '../../shared/currency-filter'
 
 export default {
   filters: {
@@ -42,6 +45,8 @@ export default {
   },
   data() {
     return {
+      dismissSecs: 5,
+      dismissCountDown: 0,
       fields: {
         'product.name': {
           label: 'Product name'
@@ -74,6 +79,7 @@ export default {
       this.sendOrder()
         .then(() => this.getOrders())
         .then(() => this.clearCart())
+        .then(() => this.showAlert())
     },
     calculatePrice(item, event) {
       if (event.target.value < 0) {
@@ -91,6 +97,12 @@ export default {
         newQuantity: event.target.value
       }
       this.changeQuantity(payload)
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs
     }
   },
   computed: {
