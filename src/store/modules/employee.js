@@ -37,6 +37,9 @@ export default {
     getOrders({ commit }) {
       axios.get('http://localhost:51444/api/orders')
         .then(result => commit('updateOrders', result.data))
+    },
+    updateOrder(context, order) {
+      return axios.put('http://localhost:51444/api/orders', order)
     }
   },
   getters: {

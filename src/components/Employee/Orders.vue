@@ -7,7 +7,7 @@
         <NewOrders />
       </b-tab>
       <b-tab title="Shipped orders">
-
+        <ShippedOrders />
       </b-tab>
     </b-tabs>
   </div>
@@ -16,11 +16,12 @@
 
 <script>
 import NewOrders from './NewOrders.vue'
+import ShippedOrders from './ShippedOrders.vue'
 
 import { mapActions } from 'vuex'
 
 export default {
-  components: { NewOrders },
+  components: { NewOrders, ShippedOrders },
   methods: {
     ...mapActions('employee', ['getOrders'])
   },

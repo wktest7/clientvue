@@ -17,6 +17,7 @@
               <router-link class="nav-link" to="/employee-home">Home</router-link>
               <router-link class="nav-link" to="/employee-products">Products</router-link>
               <router-link class="nav-link" to="/employee-orders">Orders</router-link>
+              <router-link class="nav-link" to="/employee-categories">Categories</router-link>
             </template>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">

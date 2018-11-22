@@ -15,6 +15,9 @@ import Orders from '../components/Orders.vue'
 import EmployeeHome from '../components/Employee/Home.vue'
 import EmployeeProducts from '../components/Employee/Products.vue'
 import EmployeeOrders from '../components/Employee/Orders.vue'
+import Categories from '../components/Employee/Categories.vue'
+
+
 
 
 import UserGuard from './user-guard'
@@ -46,7 +49,7 @@ export default new VueRouter({
     component: Orders,
     beforeEnter: UserGuard
   },
-  //employee employee-products
+  //employee
   {
     path: '/employee-home',
     name: 'employee-home',
@@ -63,6 +66,12 @@ export default new VueRouter({
     path: '/employee-orders',
     name: 'employee-orders',
     component: EmployeeOrders,
+    beforeEnter: EmployeeGuard
+  },
+  {
+    path: '/employee-categories',
+    name: 'employee-categories',
+    component: Categories,
     beforeEnter: EmployeeGuard
   },
   // {

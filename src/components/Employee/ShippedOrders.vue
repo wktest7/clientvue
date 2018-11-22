@@ -21,7 +21,7 @@
       </b-row>
 
       <!-- Main table element -->
-      <b-table :items="newOrders" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
+      <b-table :items="shippedOrders" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
         <template slot="dateCreated" slot-scope="data">
           {{moment(data.item.dateCreated).format('Do MMMM YYYY, h:mm:ss a')}}
         </template>
@@ -33,11 +33,6 @@
             Show items
           </b-btn>
         </template>
-        <template slot="changeStatus" slot-scope="row">
-          <b-btn variant="warning" size="sm" @click.stop="openChangeStatusModal(row.item, $event.target)" class="mr-2">
-            Change to shipped
-          </b-btn>
-        </template>
       </b-table>
       <b-row>
         <b-col md="6" class="my-1">
@@ -45,30 +40,25 @@
         </b-col>
       </b-row>
 
-      <b-modal id="newOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
+      <b-modal id="shippedOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
         <template>
           <h6>Final price: {{itemsModal.finalPrice | currency}}</h6>
           <template>
             <b-table striped hover :items="itemsModal.orderItems" :fields="itemsFields">
               <template slot="productPrice" slot-scope="row">
                 {{ row.item.productPrice | currency }}
-              </template> <template slot="price" slot-scope="row">
+              </template>
+              <template slot="price" slot-scope="row">
                 {{ row.item.price | currency }}
               </template>
             </b-table>
           </template>
         </template>
       </b-modal>
-      <b-modal id="changeStatusModal" @ok="changeStatusBtn()" ok-variant="warning" ok-title="Change" :title="moment(changeStatusModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
-        <template>
-          <h4>Are you sure you want to change status this order?</h4>
-          <h6>Company: {{changeStatusModal.companyName}}</h6>
-          <h6>Final price: {{changeStatusModal.finalPrice | currency}}</h6>
-        </template>
-      </b-modal>
     </template>
   </div>
 </template>
+
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -99,9 +89,6 @@ export default {
         },
         items: {
           label: 'Items'
-        },
-        changeStatus: {
-          label: 'Status'
         }
       },
       currentPage: 1,
@@ -109,10 +96,10 @@ export default {
       filter: null,
       // totalRows: this.$store.state.orders.filter(x => x.status === 'New')
       //   .length,
-      totalRows: mapGetters('employee', { newOrders: 'newOrders' }).length,
+      totalRows: mapGetters('employee', { shippedOrders: 'shippedOrders' })
+        .length,
       pageOptions: [5, 10, 25],
       itemsModal: {},
-      changeStatusModal: {},
       itemsFields: {
         productName: {
           label: 'Product name'
@@ -133,24 +120,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('employee', { newOrders: 'newOrders' })
+    ...mapGetters('employee', { shippedOrders: 'shippedOrders' })
   },
   methods: {
     ...mapActions('employee', ['updateOrder', 'getOrders']),
     openItemsModal(item, button) {
       this.itemsModal = item
-      this.$root.$emit('bv::show::modal', 'newOrderItemsModal', button)
-    },
-    openChangeStatusModal(item, button) {
-      this.changeStatusModal = item
-      this.$root.$emit('bv::show::modal', 'changeStatusModal', button)
-    },
-    changeStatusBtn() {
-      let order = {
-        orderId: this.changeStatusModal.orderId,
-        status: 'Shipped'
-      }
-      this.updateOrder(order).then(() => this.getOrders())
+      this.$root.$emit('bv::show::modal', 'shippedOrderItemsModal', button)
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length
