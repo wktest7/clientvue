@@ -42,11 +42,11 @@
         </b-col>
       </b-row>
 
-      <b-modal id="shippedOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.order.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
+      <b-modal id="shippedOrderItemsModal" size="lg" ok-only :title="moment(itemsModal.dateCreated).format('Do MMMM YYYY, h:mm:ss a')">
         <template>
-          <h6>Final price: {{itemsModal.order.finalPrice | currency}}</h6>
+          <h6>Final price: {{itemsModal.finalPrice | currency}}</h6>
           <template>
-            <b-table striped hover :items="itemsModal.order.orderItems" :fields="itemsFields">
+            <b-table striped hover :items="itemsModal.orderItems" :fields="itemsFields">
               <template slot="productPrice" slot-scope="row">
                 {{ row.item.productPrice | currency }}
               </template> <template slot="price" slot-scope="row">
@@ -95,9 +95,7 @@ export default {
       totalRows: mapGetters('user', { getShippedOrders: 'getShippedOrders' })
         .length,
       pageOptions: [5, 10, 25],
-      itemsModal: {
-        order: {}
-      },
+      itemsModal: {},
       itemsFields: {
         productName: {
           label: 'Product name'
@@ -140,7 +138,7 @@ export default {
   },
   methods: {
     openItemsModal(item, button) {
-      this.itemsModal.order = item
+      this.itemsModal = item
       this.$root.$emit('bv::show::modal', 'shippedOrderItemsModal', button)
     },
     onFiltered(filteredItems) {
@@ -149,7 +147,6 @@ export default {
     },
     openDataPicker() {
       this.$refs.programaticOpen.showCalendar()
-      this.$refs.programaticOpen
     }
   }
 }

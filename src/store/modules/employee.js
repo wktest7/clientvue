@@ -24,10 +24,6 @@ export default {
       axios.get('http://localhost:51444/api/products/foremployee')
         .then(result => commit('updateProducts', result.data))
     },
-    getCategories({ commit }) {
-      axios.get('http://localhost:51444/api/categories')
-        .then(result => commit('updateCategories', result.data))
-    },
     editProduct(context, product) {
       return axios.put('http://localhost:51444/api/products', product)
     },
@@ -40,6 +36,19 @@ export default {
     },
     updateOrder(context, order) {
       return axios.put('http://localhost:51444/api/orders', order)
+    },
+    getCategories({ commit }) {
+      axios.get('http://localhost:51444/api/categories')
+        .then(result => commit('updateCategories', result.data))
+    },
+    updateCategory(context, category) {
+      return axios.put('http://localhost:51444/api/categories', category)
+    },
+    deleteCategory(context, categoryId) {
+      return axios.delete('http://localhost:51444/api/categories/' + categoryId)
+    },
+    addCategory(context, category) {
+      return axios.post('http://localhost:51444/api/categories', category)
     }
   },
   getters: {

@@ -96,11 +96,13 @@
 
             </b-form-group>
             <b-form-group class="col-10 offset-1" label="Category:">
-              <b-form-select v-model="editProductModal.categoryId" :required="true">
+              <b-form-select v-model="editProductModal.categoryId" :class="[$v.editProductModal.categoryId.$invalid ? 'is-invalid' : '']">
+                <option value="null" disabled>Please select category</option>
                 <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
                   {{ category.name }}
                 </option>
               </b-form-select>
+              <div class="invalid-feedback" v-if="!$v.editProductModal.categoryId.required">Field is required.</div>
 
             </b-form-group>
             <!-- <b-button type="submit" :disabled="$v.credentials.$invalid" variant="primary">Login</b-button> -->
@@ -189,6 +191,9 @@ export default {
         decimal,
         minValue: minValue(0.1),
         maxValue: maxValue(1000)
+      },
+      categoryId: {
+        required
       }
     }
   },

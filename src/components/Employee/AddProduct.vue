@@ -43,13 +43,13 @@
 
         </b-form-group>
         <b-form-group class="col-10 offset-1" label="Category:">
-          <b-form-select v-model="newProduct.categoryId" :class="[$v.newProduct.categoryId.$invalid ? 'is-invalid' : '']" :required="true">
+          <b-form-select v-model="newProduct.categoryId" :class="[$v.newProduct.categoryId.$invalid ? 'is-invalid' : '']">
             <option value="null" disabled>Please select category</option>
             <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
               {{ category.name }}
             </option>
           </b-form-select>
-          <div class="invalid-feedback" v-if="!$v.newProduct.price.required">Field is required.</div>
+          <div class="invalid-feedback" v-if="!$v.newProduct.categoryId.required">Field is required.</div>
 
         </b-form-group>
       </b-col>
@@ -95,6 +95,7 @@ export default {
     },
     addProductBtn() {
       this.addProduct(this.newProduct)
+        .then(() => this.getProducts())
         .then(() => this.resetNewProduct())
         .then(() => this.showAlert())
     },
