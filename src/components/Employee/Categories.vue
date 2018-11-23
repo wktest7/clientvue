@@ -7,7 +7,6 @@
 
         <div>
           <template>
-            <!-- User Interface controls -->
             <b-row>
               <b-col md="6" class="my-1">
                 <b-form-group horizontal label="Filter" class="mb-0">
@@ -26,7 +25,6 @@
               </b-col>
             </b-row>
 
-            <!-- Main table element -->
             <b-table :items="categories" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
               <template slot="edit" slot-scope="row">
                 <b-btn variant="warning" size="sm" @click="openEditCategoryModal(row.item)" class="mr-2">

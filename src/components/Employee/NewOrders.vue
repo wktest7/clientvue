@@ -1,7 +1,6 @@
 <template>
   <div>
     <template>
-      <!-- User Interface controls -->
       <b-row>
         <b-col md="6" class="my-1">
           <b-form-group horizontal label="Filter" class="mb-0">
@@ -20,7 +19,6 @@
         </b-col>
       </b-row>
 
-      <!-- Main table element -->
       <b-table :items="newOrders" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
         <template slot="dateCreated" slot-scope="data">
           {{moment(data.item.dateCreated).format('Do MMMM YYYY, h:mm:ss a')}}
@@ -110,8 +108,6 @@ export default {
       currentPage: 1,
       perPage: 5,
       filter: null,
-      // totalRows: this.$store.state.orders.filter(x => x.status === 'New')
-      //   .length,
       totalRows: mapGetters('employee', { newOrders: 'newOrders' }).length,
       pageOptions: [5, 10, 25],
       itemsModal: {},
@@ -143,11 +139,9 @@ export default {
     openItemsModal(item) {
       this.itemsModal = item
       this.$refs.newOrderItemsModal.show()
-      //this.$root.$emit('bv::show::modal', 'newOrderItemsModal', button)
     },
     openChangeStatusModal(item) {
       this.changeStatusModal = item
-      //this.$root.$emit('bv::show::modal', 'changeStatusModal', button)
       this.$refs.changeStatusModal.show()
     },
     changeStatusBtn() {

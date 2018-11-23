@@ -43,11 +43,11 @@ export default {
   },
   actions: {
     getProducts({ commit }) {
-      axios.get('http://localhost:51444/api/products/foruser')
+      axios.get('/products/foruser')
         .then(result => commit('updateProducts', result.data))
     },
     getOrders({ commit }) {
-      axios.get('http://localhost:51444/api/orders/userid')
+      axios.get('/orders/userid')
         .then(result => commit('updateOrders', result.data))
     },
     sendOrder({ state }) {
@@ -55,7 +55,7 @@ export default {
       state.cart.forEach(element => {
         orderItems.push({ "productId": element.product.productId, "quantity": element.quantity })
       })
-      return axios.post('http://localhost:51444/api/orders', { orderItems: orderItems })
+      return axios.post('/orders', { orderItems: orderItems })
     }
   },
   getters: {

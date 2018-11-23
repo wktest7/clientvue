@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-alert :show="dismissCountDown" dismissible variant="success" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-      <p class="text-center">Product added.</p>
+      <p class="text-center">Category added.</p>
     </b-alert>
     <b-form-group class="col-10 offset-1 mt-3" label="Name:">
       <b-form-input type="text" :class="[$v.newCategory.name.$invalid ? 'is-invalid' : '']" v-model="newCategory.name" placeholder="Enter name" />

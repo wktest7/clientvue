@@ -2,7 +2,7 @@
   <div>
     <template>
       <b-container fluid>
-        <!-- User Interface controls -->
+
         <b-row>
           <b-col md="6" class="my-1">
             <b-form-group horizontal label="Filter" class="mb-0">
@@ -21,13 +21,12 @@
           </b-col>
         </b-row>
 
-        <!-- Main table element -->
         <b-table :items="availableProducts" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
           <template slot="price" slot-scope="data">
             {{data.item.price | currency}}
           </template>
           <template slot="showDescription" slot-scope="row">
-            <!-- we use @click.stop here to prevent emitting of a 'row-clicked' event  -->
+
             <b-button size="sm" @click="row.toggleDetails" class="mr-2">
               {{ row.detailsShowing ? 'Hide' : 'Show'}} Description
             </b-button>
@@ -99,12 +98,9 @@
                 </option>
               </b-form-select>
               <div class="invalid-feedback" v-if="!$v.editProductModal.categoryId.required">Field is required.</div>
-
             </b-form-group>
-            <!-- <b-button type="submit" :disabled="$v.credentials.$invalid" variant="primary">Login</b-button> -->
           </b-row>
         </b-modal>
-
       </b-container>
     </template>
   </div>
@@ -155,7 +151,6 @@ export default {
       },
       currentPage: 1,
       perPage: 5,
-      //totalRows: this.$store.state.products.length,
       totalRows: mapGetters('employee', {
         availableProducts: 'availableProducts'
       }).length,
@@ -202,7 +197,6 @@ export default {
     openEditProductModal(item) {
       this.editProductModal = JSON.parse(JSON.stringify(item))
       this.$refs.editAvailableProductModal.show()
-      //this.$root.$emit('bv::show::modal', 'editAvailableProductModal', button)
     },
     editProductBtn() {
       this.editProduct(this.editProductModal).then(() => this.getProducts())

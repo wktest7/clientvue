@@ -16,7 +16,7 @@ export default {
   },
   actions: {
     login({ commit }, credentials) {
-      return axios.post('http://localhost:51444/api/auth/token', credentials)
+      return axios.post('/auth/token', credentials)
         .then(result => commit('saveToken', result.data.token))
     }
   },

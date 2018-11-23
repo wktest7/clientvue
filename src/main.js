@@ -21,28 +21,25 @@ Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
 Vue.config.productionTip = false
 
+axios.defaults.baseURL = 'http://localhost:51444/api';
 
-// Add a request interceptor
 axios.interceptors.request.use(function (config) {
   if (localStorage.getItem('token')) {
     config.headers.Authorization = 'Bearer ' + localStorage.getItem('token');
   }
   return config;
 }, function (error) {
-  // Do something with request error
+
   return Promise.reject(error);
 });
 
-// Add a response interceptor
+
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
-  // Do something with response error
   if (!localStorage.getItem('token')
-    || error.response.status === 400
     || error.response.status === 401
     || error.response.status === 403) {
-    //localStorage.removeItem('token')
     store.commit('removeToken')
     router.push({ path: '/login' })
   }

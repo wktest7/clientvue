@@ -5,7 +5,8 @@ export default {
   state: {
     products: [],
     categories: [],
-    orders: []
+    orders: [],
+    information: ''
   },
   mutations: {
     updateProducts(state, products) {
@@ -16,39 +17,48 @@ export default {
     },
     updateOrders(state, orders) {
       state.orders = orders
+    },
+    updateInformation(state, message) {
+      state.information = message
     }
-
   },
   actions: {
     getProducts({ commit }) {
-      axios.get('http://localhost:51444/api/products/foremployee')
+      axios.get('/products/foremployee')
         .then(result => commit('updateProducts', result.data))
     },
     editProduct(context, product) {
-      return axios.put('http://localhost:51444/api/products', product)
+      return axios.put('/products', product)
     },
     addProduct(context, product) {
-      return axios.post('http://localhost:51444/api/products', product)
+      return axios.post('/products', product)
     },
     getOrders({ commit }) {
-      axios.get('http://localhost:51444/api/orders')
+      axios.get('/orders')
         .then(result => commit('updateOrders', result.data))
     },
     updateOrder(context, order) {
-      return axios.put('http://localhost:51444/api/orders', order)
+      return axios.put('/orders', order)
     },
     getCategories({ commit }) {
-      axios.get('http://localhost:51444/api/categories')
+      axios.get('/categories')
         .then(result => commit('updateCategories', result.data))
     },
     updateCategory(context, category) {
-      return axios.put('http://localhost:51444/api/categories', category)
+      return axios.put('/categories', category)
     },
     deleteCategory(context, categoryId) {
-      return axios.delete('http://localhost:51444/api/categories/' + categoryId)
+      return axios.delete('/categories/' + categoryId)
     },
     addCategory(context, category) {
-      return axios.post('http://localhost:51444/api/categories', category)
+      return axios.post('/categories', category)
+    },
+    getInformation({ commit }) {
+      return axios.get('/information')
+        .then(result => commit('updateInformation', result.data.message))
+    },
+    updateInformation(context, message) {
+      return axios.put('/information', message)
     }
   },
   getters: {

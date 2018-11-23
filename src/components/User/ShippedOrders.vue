@@ -90,8 +90,6 @@ export default {
       },
       currentPage: 1,
       perPage: 5,
-      // totalRows: this.$store.state.orders.filter(x => x.status === 'Shipped')
-      //   .length,
       totalRows: mapGetters('user', { getShippedOrders: 'getShippedOrders' })
         .length,
       pageOptions: [5, 10, 25],
@@ -139,7 +137,6 @@ export default {
   methods: {
     openItemsModal(item) {
       this.itemsModal = item
-      //this.$root.$emit('bv::show::modal', 'shippedOrderItemsModal', button)
       this.$refs.shippedOrderItemsModal.show()
     },
     onFiltered(filteredItems) {

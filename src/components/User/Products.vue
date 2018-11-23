@@ -2,7 +2,6 @@
   <div>
     <template>
       <b-container fluid>
-        <!-- User Interface controls -->
         <b-row>
           <b-col md="6" class="my-1">
             <b-form-group horizontal label="Filter" class="mb-0">
@@ -21,13 +20,11 @@
           </b-col>
         </b-row>
 
-        <!-- Main table element -->
         <b-table :items="products" :fields="fields" :filter="filter" @filtered="onFiltered" :current-page="currentPage" :per-page="perPage">
           <template slot="price" slot-scope="data">
             {{data.item.price | currency}}
           </template>
           <template slot="showDescription" slot-scope="row">
-            <!-- we use @click.stop here to prevent emitting of a 'row-clicked' event  -->
             <b-button size="sm" @click="row.toggleDetails" class="mr-2">
               {{ row.detailsShowing ? 'Hide' : 'Show'}} Description
             </b-button>

@@ -104,8 +104,6 @@ export default {
       },
       currentPage: 1,
       perPage: 5,
-      // totalRows: this.$store.state.orders.filter(x => x.status === 'New')
-      //   .length,
       totalRows: mapGetters('user', { newOrders: 'newOrders' }).length,
       pageOptions: [5, 10, 25],
       itemsModal: {},
@@ -154,12 +152,10 @@ export default {
     openItemsModal(item) {
       this.itemsModal = item
       this.$refs.newOrderItemsModal.show()
-      //this.$root.$emit('bv::show::modal', 'newOrderItemsModal', button)
     },
     openPayModal(item) {
       this.payModal = item
       this.$refs.newOrderPayModal.show()
-      // this.$root.$emit('bv::show::modal', 'newOrderPayModal', button)
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length

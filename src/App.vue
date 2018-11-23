@@ -6,7 +6,6 @@
         <b-collapse is-nav id="nav_dropdown_collapse">
           <b-navbar-nav>
             <template v-if="isUser">
-              <router-link class="nav-link" to="/home">Home</router-link>
               <router-link class="nav-link" to="/products">Products</router-link>
               <router-link class="nav-link" to="/orders">Orders</router-link>
               <router-link v-if="cartLength >= 1" class="nav-link" to="/orders">
@@ -14,7 +13,6 @@
               </router-link>
             </template>
             <template v-if="isEmployee">
-              <router-link class="nav-link" to="/employee-home">Home</router-link>
               <router-link class="nav-link" to="/employee-products">Products</router-link>
               <router-link class="nav-link" to="/employee-orders">Orders</router-link>
               <router-link class="nav-link" to="/employee-categories">Categories</router-link>

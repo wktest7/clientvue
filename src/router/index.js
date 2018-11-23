@@ -3,16 +3,11 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-// import Login from '../components/Login.vue'
-// import Admin from '../components/Admin.vue'
-// import AdminTwo from '../components/AdminTwo.vue'
-// import About from '../components/About.vue'
+
 import Login from '../components/Login.vue'
-import Home from '../components/User/Home.vue'
 import Products from '../components/User/Products.vue'
 import Orders from '../components/User/Orders.vue'
 
-import EmployeeHome from '../components/Employee/Home.vue'
 import EmployeeProducts from '../components/Employee/Products.vue'
 import EmployeeOrders from '../components/Employee/Orders.vue'
 import Categories from '../components/Employee/Categories.vue'
@@ -32,12 +27,6 @@ export default new VueRouter({
   },
   //user
   {
-    path: '/home',
-    name: 'home',
-    component: Home,
-    beforeEnter: UserGuard
-  },
-  {
     path: '/products',
     name: 'products',
     component: Products,
@@ -50,12 +39,6 @@ export default new VueRouter({
     beforeEnter: UserGuard
   },
   //employee
-  {
-    path: '/employee-home',
-    name: 'employee-home',
-    component: EmployeeHome,
-    beforeEnter: EmployeeGuard
-  },
   {
     path: '/employee-products',
     name: 'employee-products',
@@ -74,21 +57,6 @@ export default new VueRouter({
     component: Categories,
     beforeEnter: EmployeeGuard
   },
-  // {
-  //   path: '/admin',
-  //   name: 'admin',
-  //   component: Admin
-  // },
-  // {
-  //   path: '/admintwo',
-  //   name: 'admintwo',
-  //   component: AdminTwo
-  // },
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   component: About
-  // },
   {
     path: '*',
     redirect: { path: '/login' }
